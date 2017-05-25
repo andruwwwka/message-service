@@ -1,0 +1,11 @@
+.message-row{
+    cursor: pointer;
+}
+
+#perPage{
+    max-width: 80px;
+}
+
+.attribute-label{
+    font-weight: bold;
+}

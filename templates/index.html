@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>История сообщений</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for("static", filename="main.css") }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+            var perPage = "{{ per_page }}";
+        </script>
+        <script src="{{ url_for("static", filename="main.js") }}"></script>
+    </head>
+    <body>
+
+        {% macro render_navigation(pagination, endpoint) %}
+            <ul class=pagination>
+                {% for page in pagination.iter_pages() %}
+                    {% if page and pagination.pages != 1 %}
+                        {% if page != pagination.page %}
+                            <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+                        {% else %}
+                            <li class="active"><a>{{ page }}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endmacro %}
+
+        <div class="container">
+            <h2>Лог отправки сообщений</h2>
+            <p>Для просмотра детальной информации о сообщении нажмите на строку с этим сообщением</p>
+            <label for="perPage">Отображать на странице</label>
+            <select class="form-control" id="perPage">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            {{ render_navigation(messages, 'sender.resources.index') }}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Тип</th>
+                        <th>Статус</th>
+                        <th>Заголовок</th>
+                        <th>Адресат</th>
+                        <th>Формат</th>
+                        <th>Теги</th>
+                        <th>Дата создания</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for message in messages.items %}
+                    <tr class="message-row" onclick="showMessageData('{{ message.id }}')">
+                        <td>{{ message.type }}</td>
+                        <td>{{ message.status }}</td>
+                        <td>{{ message.short_header }}</td>
+                        <td>{{ message.recipient }}</td>
+                        <td>{{ message.format }}</td>
+                        <td>{{ message.short_tags_text }}</td>
+                        <td>{{ message.date_of_creation }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {{ render_navigation(messages, 'sender.resources.index') }}
+        </div>
+
+        {% include 'modal.html' %}
+
+    </body>
+</html>
