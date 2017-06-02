@@ -4,3 +4,4 @@
 /settings/local_settings.py
 __pycache__
 settings/stas.py
+*.pyc

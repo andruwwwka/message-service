@@ -14,7 +14,7 @@ def app():
 
     :return: Flask приложение
     """
-    application = create_app("settings.testing")
+    application = create_app("settings/testing.py")
     return application
 
 
@@ -35,7 +35,7 @@ def message():
     msg.save()
     return msg
 
-
+#review
 class TestMessageServer:
     """Тесты доступности локейшенов приложения
 
@@ -50,13 +50,13 @@ class TestMessageServer:
         assert live_server._process
         assert live_server._process.is_alive()
 
-    def test_index_page_available(self, live_server):
+    def test_index_page_available(self, server):
         """Тест доступности главной страницы через GET запрос
 
         :param live_server: сервер
         :return: главная страница отдает 200 код ответа
         """
-        res = requests.get(live_server.url("/"))
+        res = requests.get(server.url("/"))
         assert res.status_code == 200
 
     def test_index_page_post_method_not_support(self, live_server):
