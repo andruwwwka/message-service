@@ -40,7 +40,7 @@ def message():
             result = json.dumps({"error": "Некорректный идентификатор сообщения"})
     return result
 
-
+#review
 @api.route("/messages", methods=["POST"])
 def messages():
     """Представление API добавления сообщения
@@ -52,6 +52,7 @@ def messages():
         post_data = request.json
         try:
             idents = list()
+            #review
             for recipient in post_data.get("recipients"):
                 msg = Message(
                     type=post_data.get("type"),
@@ -66,6 +67,7 @@ def messages():
                 send_message.delay(str(msg.id))
                 idents.append(str(msg.id))
                 logging.info("Создано сообщение с идентификатором %s из запроса %s" % (msg.id, request.json))
+            #review
             response = "Идентификаторы новых сообщений: %s" % ", ".join(idents)
         except ValidationError:
             logging.warning("Отклонен запрос на добавление сообщения с параметрами %s" % request.json)

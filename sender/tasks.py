@@ -1,4 +1,4 @@
-from sender.celery import celery_app
+from sender.celery_app import celery_app
 from sender.transport import Transport
 
 

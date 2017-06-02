@@ -1,5 +1,5 @@
-from sender.celery import celery_logger
-from sender.email import Email
+from sender.celery_app import celery_logger
+from sender.email_transport import Email
 from sender.models import Message
 from sender.telegram import Telegram
 
@@ -48,7 +48,11 @@ class Transport(object):
 
         :return: результат отправки
         """
-        self.mark_message_process()
-        sended = self.transport.send(self.message)
-        self.mark_message_sent(sended)
-        return sended
+        try:
+            self.mark_message_process()
+            sended = self.transport.send(self.message)
+            self.mark_message_sent(sended)
+            return sended
+        except Exception as e:
+            celery_logger.exception("Exception processing %s", self.message)
+            raise e

@@ -1,7 +1,7 @@
 MONGODB_SETTINGS = {'db': 'testing',}
 TESTING = True
 SECRET_KEY = 'flask+mongoengine=<3'
-debug = True
+DEBUG = True
 
 HOST = "127.0.0.1"
 PORT = 5000

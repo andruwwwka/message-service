@@ -1,7 +1,7 @@
 import requests
 
 from flaskapp import app
-from sender.celery import celery_logger
+from sender.celery_app import celery_logger
 
 
 class Telegram(object):
@@ -19,11 +19,16 @@ class Telegram(object):
         data = {"text": message.body}
         result = True
         celery_logger.info("Отправка сообщения %s адресату %s" % (message.id, message.recipient))
+
         data.update({"chat_id": message.recipient})
         r = requests.post("https://api.telegram.org/bot%s/sendMessage" % app.config["TELEGRAM_BOT_TOKEN"], json=data)
         if r.status_code == 200:
             celery_logger.info("Сообщение %s отправлено адресату %s" % (message.id, message.recipient))
         else:
-            celery_logger.error("Произошла ошибка при отправке сообщения %s адресату %s" % (message.id, message.recipient))
+            #review
+            celery_logger.exception("Произошла ошибка при отправке сообщения %s адресату %s: %s:%s",
+                                    message.id,
+                                    message.recipient,
+                                    r.status_code, r.text)
             result = False
         return result

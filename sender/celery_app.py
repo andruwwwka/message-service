@@ -1,21 +1,27 @@
+from pprint import pprint
+
+#review
 from celery import Celery
+from flask.globals import current_app
 from celery.utils.log import get_task_logger
 
-from flaskapp import app
 
-
-def make_celery(app):
+def init_celery(app, celery):
     """Инициализация Celery
 
-    :param app: Flask-приложение
+    :param celery:
+    :type celery: Celery
     :return: Celery приложение
     """
-    celery = Celery(
-        app.config["CELERY_MAIN_MODULE"],
+
+    pprint(app.config)
+
+    celery.config_from_object(dict(
         backend=app.config["CELERY_RESULT_BACKEND"],
         broker=app.config["CELERY_BROKER_URL"],
-        include=app.config["CELERY_TASKS_MODULES"],
-    )
+        include=app.config["CELERY_TASKS_MODULES"]
+    ))
+
     celery.conf.update(app.config)
     TaskBase = celery.Task
 
@@ -29,9 +35,12 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
+celery_app = Celery(
+    "sender",
+    backend="redis://",
+    broker="redis://",
+    include=["sender.tasks"],
 
-celery_app = make_celery(app)
+)
+
 celery_logger = get_task_logger(__name__)
-
-if __name__ == '__main__':
-    celery_app.start()

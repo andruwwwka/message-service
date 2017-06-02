@@ -25,6 +25,7 @@ class Message(db.Document):
     format = db.StringField(max_length=4, choices=FORMAT_TYPE, required=True)
     status = db.StringField(max_length=7, default="new", choices=MESSAGE_STATUSES)
     recipient = db.StringField(max_length=128, required=True)
+    #review
     tags = db.ListField()
     created = db.DateTimeField(default=datetime.datetime.now)
 
