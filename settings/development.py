@@ -20,8 +20,7 @@ LOGGING = {
     'handlers': {
         'default': {
             'level': 'NOTSET',
-            'class': 'logging.FileHandler',
-            'filename': 'app.log',
+            'class': 'logging.StreamHandler',
             'formatter': 'default'
         }
     },
@@ -48,6 +47,4 @@ EMAIL_PASSWORD = ""
 EMAIL_SENDER = ""
 
 # Настройки Telegram Bot'a
-TELEGRAM_BOT_TOKEN = ""
-
-from settings.local_settings import *
+TELEGRAM_BOT_TOKEN = "123561614:AAENrTfplMq7qorq1gStvSHWeDXuoT5XVFY"
