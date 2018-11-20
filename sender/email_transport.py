@@ -3,14 +3,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from flaskapp import app
-from sender.celery import celery_logger
+from sender.celery_app import celery_logger
 
 
+#review
 class Email(object):
     """Класс транспорта Email сообщений
 
     """
 
+    #review
     @staticmethod
     def send(message):
         """Метод отправки сообщения
@@ -30,6 +32,7 @@ class Email(object):
         smtp.login(from_mail, app.config["EMAIL_PASSWORD"])
         celery_logger.info("Отправка сообщения %s адресату %s" % (message.id, message.recipient))
         msg["To"] = message.recipient
+        #review
         try:
             smtp.sendmail(from_mail, message.recipient, msg.as_string())
             celery_logger.info("Сообщение %s отправлено адресату %s" % (message.id, message.recipient))
